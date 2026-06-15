@@ -1,0 +1,37 @@
+.env
+.env.*
+
+# Python cache and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+openapidemo/
+
+# Tool caches and test artifacts
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Build outputs
+build/
+dist/
+*.egg-info/
+pip-wheel-metadata/
+
+# Project-generated data and exports
+extracted_texts/
+*.tar
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
