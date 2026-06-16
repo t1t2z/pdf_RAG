@@ -36,7 +36,7 @@ llm = ChatOpenAI(
     api_key = os.environ.get('DEEPSEEK_API_KEY'),
     base_url = os.environ.get('DEEPSEEK_API_BASE_URL'),
     model = "deepseek-v4-pro",
-    # streaming=True,
+    streaming=True,
     temperature=0
 )
 

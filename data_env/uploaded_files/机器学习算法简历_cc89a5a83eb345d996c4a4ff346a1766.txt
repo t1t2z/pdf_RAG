@@ -1,0 +1,100 @@
+--- chunk 1 ---
+page_content='陶卓 2006/06 zhuotao32@gmail.com
+15026808466
+教育经历' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 2 ---
+page_content='教育经历
+南京工程学院&奥卢大学(芬兰) 软件工程 · 本科 2024/09 - 2028/06' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 3 ---
+page_content='主修课程：数据结构、算法设计、操作系统、计算机网络、Web开发技术
+荣誉奖项' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 4 ---
+page_content='荣誉奖项
+江苏省机器人大赛 一等奖(冠军)
+全国大学生电子设计竞赛(江苏赛区) 二等奖' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 5 ---
+page_content='江苏省大学生创新创业训练计划项目(省级)
+南京工程学院电子设计竞赛 校一等奖' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 6 ---
+page_content='全球校园人工智能算法精英赛 江苏省一等奖
+全球校园人工智能算法精英赛 全国一等奖（冠军）
+项目经历' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 7 ---
+page_content='项目经历
+QRT-DETR：实时检测Transformer的后训练量' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 8 ---
+page_content='核心研发成员（第三作者） 2025/05 - 2026/03
+化框架' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 9 ---
+page_content='项目背景' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 10 ---
+page_content='：针对百度RT-DETR模型在边缘设备部署时面临的高计算量与内存瓶颈，研发一套高精度的后训练量化' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 11 ---
+page_content='（PTQ）框架，以实现模型的轻量化部署，平衡检测精度
+与推理效率。' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 12 ---
+page_content='项目成果: 在COCO' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 13 ---
+page_content='2017、NEU-DET、VisDrone2019等多个数据集上完成全面的精度评估、消融实验及Gr' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 14 ---
+page_content='消融实验及Grad-' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 15 ---
+page_content='CAM可视化分析。实施了Conv-BN算子融合、敏感层保护等模型优化技术，有效减少了参数量与计算量' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 16 ---
+page_content='参数量与计算量。相关研' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 17 ---
+page_content='究成果已形成论文，SCI一区期刊《Neurocomputing》（IF=5.5）在刊' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 18 ---
+page_content='水下自主管道巡检机器人研发 项目负责人 2025/07 - 2025/11
+项目目标' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 19 ---
+page_content='：用于浅水环境（如石油管道）的自主巡检机器人，集成视觉识别系统，以实现对水下管道状态与石油泄' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 20 ---
+page_content='漏的实时检测与定位。
+个人角色
+：项目负责人，负责从上位机软件开发的全程管理与核心开发。' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 21 ---
+page_content='项目成果 ： 上位机视觉系统开发' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 22 ---
+page_content='：使用Python与OpenCV开发了上位机视觉识别软件，实现了对水下管道的实时' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 23 ---
+page_content='目标检测与石油泄漏区域的识别，并结合图像处理算法完成缺陷的精准定位。
+专业技能' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 24 ---
+page_content='Python , C/C++ 大学英语CET4/CET6 PyTorch |' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 25 ---
+page_content='| MQBench量化框架 | Transformer架构 目标检测（RT-DETR、' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 26 ---
+page_content='YOLO） | OpenCV | Grad-CAM可视化 PID控制算法
+科研成果
+发明专利一篇' metadata={'file_tag': '机器学习算法简历.pdf'}
+
+--- chunk 27 ---
+page_content='发明专利一篇
+NEUROCOMPUTING SCI二区
+工业控制计算机期刊论文一篇' metadata={'file_tag': '机器学习算法简历.pdf'}

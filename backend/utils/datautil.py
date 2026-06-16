@@ -1,11 +1,15 @@
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from backend.config import vectorstore,llm
+from typing import Optional, List
 
 #检索器，参数为相似度检查前三条记录，后续会根据这个检索器从数据库中找到最相似的记录
-def get_custom_retriever(k: int = 3, file_tag: str | None = None):
+def get_custom_retriever(k: int = 3, file_tags: Optional[List[str]] = None):
     search_kwargs = {"k": k}
-    if file_tag is not None:
-        search_kwargs["filter"] = {"file_tag": file_tag}
+    if file_tags and len(file_tags) > 0:
+        # PGVector jsonb 多值过滤语法：$in
+        search_kwargs["filter"] = {
+            "file_tag": {"$in": file_tags}
+        }
 
     return vectorstore.as_retriever(search_kwargs=search_kwargs)
 

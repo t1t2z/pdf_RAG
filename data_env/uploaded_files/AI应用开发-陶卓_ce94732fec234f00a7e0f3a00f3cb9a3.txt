@@ -1,0 +1,160 @@
+--- chunk 1 ---
+page_content='陶卓
+出生年月：2006.6 、籍 贯：江苏无锡
+手 机：15026808466' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 2 ---
+page_content='邮 箱：zhuotao32@gmail.com
+教育经历：' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 3 ---
+page_content='教育经历：
+南京工程学院 & 奥卢大学（芬兰） 软件工程· 本科
+项目经历' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 4 ---
+page_content='项目经历
+AI 知识库问答系统（RAG） 独立开发' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 5 ---
+page_content='项目背景' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 6 ---
+page_content='：传统的文档查阅效率低下，用户需要逐页翻找信息。本项目构建一个基于大模型的智能知识库问答系统，用户' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 7 ---
+page_content='上传 PDF 文档后可直接用自然语言提问，AI 基于文档内容给出精准回答。
+个人职责：' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 8 ---
+page_content=' 独立完成全栈开发：从后端 API 设计、数据库建模、大模型集成到 Docker 容器化部署' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 9 ---
+page_content=' 使用 pdfplumber 实现 PDF 文本提取，设计重叠窗口分块算法防止语义断裂' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 10 ---
+page_content=' 集成阿里通义千问 text-embedding-v3 将文本块向量化，存入' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 11 ---
+page_content='PostgreSQL pgvector 向量数据库' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 12 ---
+page_content=' 设计 RAG 检索问答流程：用户提问 → 向量化 → 余弦相似度检索 Top-3 相关片段 →' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 13 ---
+page_content='相关片段 → 拼接 Prompt →' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 14 ---
+page_content='DeepSeek V4 流式生成回答' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 15 ---
+page_content=' 通过 StreamingResponse + generator' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 16 ---
+page_content='实现逐字流式输出，提升对话体验' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 17 ---
+page_content=' 编写 Dockerfile + docker-compose.yml' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 18 ---
+page_content='实现一键容器化部署，Nginx 反向代理后部署至阿里云 ECS 公' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 19 ---
+page_content='网可访问' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 20 ---
+page_content='项目成果 ：已上线可访问 http://124.221.159.240:8000/docs' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 21 ---
+page_content='产品管理系统（Fullstack） 独立开发' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 22 ---
+page_content='项目背景 ：关于 FastAPI 后端开发，前后端分离架构，实现对产品数据的增删改查管理。' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 23 ---
+page_content='个人职责：' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 24 ---
+page_content=' 使用 FastAPI 设计 RESTful API，实现' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 25 ---
+page_content='API，实现 GET/POST/PUT/DELETE 完整 CRUD 接口' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 26 ---
+page_content=' 使用 SQLAlchemy ORM 连接' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 27 ---
+page_content='ORM 连接 PostgreSQL，实现数据持久化与数据库连接分层管理' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 28 ---
+page_content=' 使用 Pydantic 实现请求体自动校验与 Swagger API 文档生成' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 29 ---
+page_content=' 前端使用 React 构建用户界面，Axios 发起 HTTP 请求与后端通信，配置 CORS' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 30 ---
+page_content='CORS 跨域支持;' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 31 ---
+page_content='React 前端完成 build 打包' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 32 ---
+page_content='项目成果: 完成了前后端通信的完整开发流程，理解了路径参数与查询参数的区别、CORS 原理、ORM' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 33 ---
+page_content='原理、ORM 设计模' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 34 ---
+page_content='式等关键概念。
+水下自主管道巡检机器人研发
+上位机视觉负责人' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 35 ---
+page_content='项目背景 ：本项目旨在开发浅水环境中的自主管道巡检机器人，用于实现水下管道石油泄漏检测任务。' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 36 ---
+page_content='个人职责 ：上位机视觉系统开发：作为核心开发模块，采用 Python 与 OpenCV' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 37 ---
+page_content='OpenCV 技术栈搭建上位机视觉识' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 38 ---
+page_content='别平台，核心聚焦水下管道状态检测与石油泄漏识别——针对水下光线昏暗、水体散射、黑色石油与水体对' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 39 ---
+page_content='比度低等复杂工况，通过图像预处理、颜色空间转换、轮廓检测等传统计算机视觉方法实现黑色石油区域的' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 40 ---
+page_content='识别与定位。' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 41 ---
+page_content='项目成果 ：完成了水下自主管道巡检机器人研发工作,获得全球校园人工智能算法精英赛全国一等奖（冠军）' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 42 ---
+page_content='技术栈' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 43 ---
+page_content='Python | SQL | FastAPI | PostgreSQL | pgvector |' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 44 ---
+page_content='| SQLAlchemy | Docker | Nginx | DeepSeek API |' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 45 ---
+page_content='API | 通义千问 API | RAG' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 46 ---
+page_content='| Embedding | OpenCV | React | Git | Linux |' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 47 ---
+page_content='| Swagger/OpenAPI' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 48 ---
+page_content='奖项成果
+全球校园人工智能算法精英赛 全国一等奖（冠军）江苏省机器人大赛 一等奖（冠军）' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 49 ---
+page_content='全国大学生电子设计竞赛 江苏赛区二等奖
+NEUROCOMPUTING SCI二区' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}
+
+--- chunk 50 ---
+page_content='工业控制计算机期刊论文一篇' metadata={'file_tag': 'AI应用开发-陶卓.pdf'}

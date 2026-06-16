@@ -12,14 +12,16 @@ def get_current_time() -> str:
     return f"当前北京时间：{now}"
 
 @tool
-def rag_search(query: str, history: str , search: bool = True) -> str:
+def rag_search(query: str, history: str , search: bool = True, files: list[str] | None = None) -> str:
     """
     检索内部知识库文档，查询文档资料、相关知识点时使用此工具
     :param query: 需要检索的问题/关键词
     :param history: 对话历史
     :param search: 是否使用检索功能
+    :param files: 用户指定检索的知识库文档列表,默认为None即不指定
     """
-    return rag_chain.invoke({"query": query, "history": history,"search": search})
+    # print(f"rag_search工具被调用，参数：query={query}, history={history}, search={search}, files={files}")
+    return rag_chain.invoke({"query": query, "history": history,"search": search, "files": files})
 
 @tool
 def calculator(a: float, b: float, op: str) -> str:
