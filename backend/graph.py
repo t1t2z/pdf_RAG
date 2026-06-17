@@ -1,6 +1,6 @@
 from typing import TypedDict, Optional, List, Dict, AsyncGenerator
 from backend.utils.tools import get_current_time
-from backend.chain import build_rag_response_stream, build_rag_response_sync
+from backend.responseCore import response_stream
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import StateGraph, START, END
 from langgraph.types import StreamWriter
@@ -8,28 +8,27 @@ from backend.config import llm
 
 memory = MemorySaver()
 
-
 class AppState(TypedDict):
-    user_input: str
-    intent: Optional[str]
-    response: Optional[str]
-    chat_history: List[Dict[str, str]]
-    files: List[str]
+    user_input: str 
+    intent: Optional[str] 
+    response: Optional[str] 
+    chat_history: List[Dict[str, str]] #传进来时就为[]或[..]
+    files: List[str] #传进来时就为[]或[..]
     sub_intent: Optional[str]
 
 
 def update_history(state: AppState) -> None:
-    if "chat_history" not in state:
-        state["chat_history"] = []
+
     state["chat_history"].append({"role": "human", "content": state["user_input"]})
     state["chat_history"].append({"role": "ai", "content": state["response"]})
 
 
-# ==================== 节点1：意图识别 (同步) ====================
 
-def intent_node(state: AppState) -> AppState:
+async def intent_node(state: AppState) -> AppState:
+    # breakpoint()
     user_input = state["user_input"]
-    chat_history = state.get("chat_history", [])
+
+    chat_history = state["chat_history"]#传进来就因该是[]或[..]
     history_context = "\n".join([f"{msg['role']}: {msg['content']}" for msg in chat_history])
 
     prompt = f"""
@@ -42,29 +41,27 @@ def intent_node(state: AppState) -> AppState:
 
     """
     try:
-        res = llm.invoke(prompt)
+        res = llm.invoke(prompt) #TODO 这就会阻塞线程
         state["intent"] = res.content.strip()
     except Exception as e:
-        print(f"意图识别出错: {e}")
+        print(f"意图识别出错: {e}")#TODO 这个因该写在日志里
         state["intent"] = "chat"
 
-    if state["intent"] not in ["time", "calculate", "chat"]:
-        state["intent"] = "chat"
+    finally:
+        if state["intent"] not in ["time", "calculate", "chat"]:
+            state["intent"] = "chat"
+
     return state
 
 
-# ==================== 节点2：查时间 ====================
-
-def handle_time(state: AppState) -> AppState:
+async def time_node(state: AppState) -> AppState:
     now = get_current_time.invoke({})
     state["response"] = f"当前北京时间：{now}"
-    update_history(state)
+    update_history(state) #TODO 调用工具因该写在log里，并且传给前端，让前端实时显示工具调用情况
     return state
 
 
-# ==================== 节点3：计算 ====================
-
-def handle_calculate(state: AppState) -> AppState:
+async def calculate_node(state: AppState) -> AppState:
     user_input = state["user_input"]
     chat_history = state.get("chat_history", [])
     history_context = "\n".join([f"{msg['role']}: {msg['content']}" for msg in chat_history])
@@ -79,7 +76,7 @@ def handle_calculate(state: AppState) -> AppState:
         res = llm.invoke(prompt)
         state["response"] = res.content.strip()
     except Exception as e:
-        print(f"计算出错: {e}")
+        print(f"计算出错: {e}")#TODO 这个因该写在日志里
         state["response"] = "计算出错，请重试"
     finally:
         update_history(state)
@@ -87,16 +84,14 @@ def handle_calculate(state: AppState) -> AppState:
     return state
 
 
-# ==================== 节点4：对话（带流式） ====================
-
-def _decide_chat_sub_intent(state: AppState) -> str:
+def intent_chat_sub(state: AppState) -> str:
     user_input = state["user_input"]
-    chat_history = state.get("chat_history", [])
+    chat_history = state["chat_history"]
     history_context = "\n".join([f"{msg['role']}: {msg['content']}" for msg in chat_history])
-    selected_files = state.get("files", [])
+    selected_files = state["files"]
 
-    #如果有file，直接走rag
-    if selected_files and len(selected_files) > 0:
+
+    if selected_files:
         state["sub_intent"] = "rag_search_chat"
         return state["sub_intent"]
 
@@ -111,7 +106,7 @@ def _decide_chat_sub_intent(state: AppState) -> str:
     只返回 rag_search_chat 或 normal_chat
     """
     try:
-        res = llm.invoke(prompt)
+        res = llm.invoke(prompt) #TODO 会阻塞线程
         result = res.content.strip()
     except Exception:
         result = "normal_chat"
@@ -120,18 +115,14 @@ def _decide_chat_sub_intent(state: AppState) -> str:
     return state["sub_intent"]
 
 
-async def handle_chat(state: AppState, writer: StreamWriter) -> AppState:
-    """
-    异步节点：通过 writer 实现 token-level streaming。
-    writer 是 LangGraph 的 StreamWriter，用来把 token 逐个传出去。
-    """
-    user_input = state["user_input"]
-    chat_history = state.get("chat_history", [])
-    history_context = "\n".join([f"{msg['role']}: {msg['content']}" for msg in chat_history])
-    selected_files = state.get("files")
+async def chat_node(state: AppState, writer: StreamWriter) -> AppState:
 
-    # 二次路由
-    _decide_chat_sub_intent(state)
+    user_input = state["user_input"]
+    chat_history = state["chat_history"]
+    history_context = "\n".join([f"{msg['role']}: {msg['content']}" for msg in chat_history])
+    files = state["files"]
+
+    intent_chat_sub(state)
 
     if state["sub_intent"] == "rag_search_chat":
         writer({"type": "status", "content": "📚 正在检索知识库..."})
@@ -139,11 +130,11 @@ async def handle_chat(state: AppState, writer: StreamWriter) -> AppState:
         writer({"type": "status", "content": "💬 正在生成回答..."})
 
     full_response = ""
-    async for chunk in build_rag_response_stream(
-        query=user_input,
-        history=history_context,
-        files=selected_files,
-        search=(state["sub_intent"] == "rag_search_chat"),
+    async for chunk in response_stream( #response_stream返回一个异步迭代器
+        query = user_input,
+        history = history_context,
+        files = files,
+        search = (state["sub_intent"] == "rag_search_chat")
     ):
         full_response += chunk
         writer({"type": "chunk", "content": chunk})
@@ -153,25 +144,23 @@ async def handle_chat(state: AppState, writer: StreamWriter) -> AppState:
     return state
 
 
-# ==================== 路由边 ====================
-
 def route_by_intent(state: AppState) -> str:
     if state["intent"] == "time":
-        return "node_time"
+        return "time"
     elif state["intent"] == "calculate":
-        return "node_calculate"
+        return "calculate"
     else:
-        return "node_chat"
+        return "chat"
 
 
-# ==================== 构建 Graph ====================
+#构建 Graph
 
 workflow = StateGraph(AppState)
 
 workflow.add_node("intent_node", intent_node)
-workflow.add_node("node_time", handle_time)
-workflow.add_node("node_calculate", handle_calculate)
-workflow.add_node("node_chat", handle_chat)
+workflow.add_node("time", time_node)
+workflow.add_node("calculate", calculate_node)
+workflow.add_node("chat", chat_node)
 
 workflow.add_edge(START, "intent_node")
 
@@ -180,61 +169,36 @@ workflow.add_conditional_edges(
     source="intent_node",
     path=route_by_intent,
     path_map={
-        "node_time": "node_time",
-        "node_calculate": "node_calculate",
-        "node_chat": "node_chat"
+        "time": "time",
+        "calculate": "calculate",
+        "chat": "chat"
     }
 )
 
-workflow.add_edge("node_time", END)
-workflow.add_edge("node_calculate", END)
-workflow.add_edge("node_chat", END)
+workflow.add_edge("time", END)
+workflow.add_edge("calculate", END)
+workflow.add_edge("chat", END)
 
 graph = workflow.compile(checkpointer=memory)
 
 
-# ==================== 流式 Graph 运行器 ====================
-
+# 流式Graph运行，graph才是工作链，chain只是工具，所以它只返回迭代器，而不真正输出
 async def run_graph_with_streaming(
     input_state: dict,
-    config: dict,
+    config: dict
 ) -> AsyncGenerator[tuple[str, str], None]:
-    """
-    使用 graph.astream(stream_mode="custom") 运行 LangGraph，
-    由 handle_chat 节点通过 writer 发出 token。
-
-    Yield 格式: ("status" | "chunk" | "error", content)
-    """
-    # 确保 config 完整
-    full_config = {
-        "configurable": {
-            "thread_id": config.get("configurable", {}).get("thread_id", "default"),
-        }
-    }
-    checkpoint = memory.get_tuple(full_config)
-    if checkpoint is None:
-        # 新会话：传完整 state（graph.astream 需要 TypedDict 的初始值）
-        full_config["configurable"]["checkpoint_ns"] = ""
-    else:
-        # 已有会话：图会自动合并
-        full_config = checkpoint.config
 
     yield ("status", "🔍 正在分析意图...")
 
-    try:
-        async for chunk in graph.astream(
-            input_state,
-            config=full_config,
-            stream_mode="custom",
-        ):
-            # chunk 就是 node 里 writer() 传出的 dict
-            if isinstance(chunk, dict):
-                event_type = chunk.get("type", "chunk")
-                content = chunk.get("content", "")
-                yield (event_type, content)
-
-    except Exception as e:
-        yield ("error", str(e))
+    async for chunk in graph.astream(
+        input = input_state if not memory.get_tuple(config) else {"user_input" : input_state["user_input"]} ,
+        config = config,
+        stream_mode = "custom"
+    ):
+        if isinstance(chunk, dict):
+            event_type = chunk["type"]
+            content = chunk["content"]
+            yield (event_type, content)
 
 
 if __name__ == "__main__":
@@ -244,7 +208,15 @@ if __name__ == "__main__":
         config = {"configurable": {"thread_id": "test_session_1"}}
 
         async for status, content in run_graph_with_streaming(
-            {"user_input": "你好，请简单介绍自己", "intent": None, "response": None, "chat_history": [], "files": []},
+            {"user_input": "你好，我叫小明", "intent": None, "response": None, "chat_history": [], "files": []},
+            config,
+        ):
+            if status == "chunk":
+                print(content, end="", flush=True)
+        print()
+        
+        async for status, content in run_graph_with_streaming(
+            {"user_input": "我叫什么名字", "intent": None, "response": None, "chat_history": [], "files": []},
             config,
         ):
             if status == "chunk":

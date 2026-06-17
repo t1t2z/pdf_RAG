@@ -181,7 +181,7 @@ export default function App() {
             } else if (parsed.type === 'chunk') {
               // 真正的 token 增量
               fullResponse += parsed.content
-              setThinkingText('')  // 开始输出内容后隐藏状态
+              // setThinkingText('')  // 开始输出内容后隐藏状态
 
               setMessages(prev => {
                 const updated = [...prev]

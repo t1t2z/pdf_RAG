@@ -3,9 +3,9 @@ from backend.config import vectorstore,llm
 from typing import Optional, List
 
 #检索器，参数为相似度检查前三条记录，后续会根据这个检索器从数据库中找到最相似的记录
-def get_custom_retriever(k: int = 3, file_tags: Optional[List[str]] = None):
+def get_custom_retriever(file_tags: List[str] ,k: int = 3):
     search_kwargs = {"k": k}
-    if file_tags and len(file_tags) > 0:
+    if len(file_tags) > 0:
         # PGVector jsonb 多值过滤语法：$in
         search_kwargs["filter"] = {
             "file_tag": {"$in": file_tags}

@@ -1,19 +1,19 @@
 import io
 import json
 from typing import Optional, List, AsyncGenerator
-from fastapi import FastAPI, UploadFile, File, HTTPException, Query
+from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from langchain_core.documents import Document
-from backend.utils.datautil import text_splitter, get_custom_retriever
-from backend.config import vectorstore, engine, llm
-from backend.graph import memory, run_graph_with_streaming
+from backend.utils.datautil import text_splitter
+from backend.config import vectorstore, engine
+from backend.graph import run_graph_with_streaming
 from pathlib import Path
 from sqlalchemy import text
 from uuid import uuid4
 import pdfplumber
-from langgraph.checkpoint.base import CheckpointTuple
+
 
 app = FastAPI()
 
@@ -27,15 +27,11 @@ app.add_middleware(
 )
 
 
-# ==================== Pydantic 请求体 ====================
-
 class ChatRequest(BaseModel):
     text: str
-    thread_id: str = "default_session"
-    files: Optional[List[str]] = None
+    thread_id: str 
+    files: Optional[List[str]]
 
-
-# ==================== 文档上传 ====================
 
 @app.post('/upload')
 async def upload(file: UploadFile = File(...)):
@@ -75,67 +71,58 @@ async def upload(file: UploadFile = File(...)):
     }
 
 
-# ==================== 流式对话 ====================
-
-def _build_chat_input(text: str, thread_id: str, files: Optional[List[str]]) -> dict:
-    """构建 graph 输入"""
-    config = {"configurable": {"thread_id": thread_id}}
-    checkpoint: CheckpointTuple | None = memory.get_tuple(config)
-
-    if checkpoint is None:
-        return {
-            "user_input": text,
-            "intent": None,
-            "response": None,
-            "chat_history": [],
-            "files": files or []
-        }
-    else:
-        return {"user_input": text, "files": files or []}
+def _build_chat_input(text: str,  files: Optional[List[str]]) -> dict:
+    return {
+        "user_input": text,
+        "intent": None,
+        "response": None,
+        "chat_history": [],
+        "files": files or [],
+        "sub_intent": None
+    }
 
 
-async def _sse_event(event_type: str, content: str) -> str:
-    """生成一条 SSE 事件"""
+
+def _sse_event(event_type: str, content: str) -> str:
     return f"data: {json.dumps({'type': event_type, 'content': content}, ensure_ascii=False)}\n\n"
 
 
 async def _stream_graph_response(
     text: str,
     thread_id: str,
-    files: Optional[List[str]]
+    files: Optional[List[str]] 
 ) -> AsyncGenerator[str, None]:
     """
     运行 LangGraph 流程，每步都发 status 事件。
     当到达 LLM 调用时，转向真正的 token-level streaming 并 yield chunk。
     """
     config = {"configurable": {"thread_id": thread_id}}
-    input_state = _build_chat_input(text, thread_id, files)
-
+    input_state = _build_chat_input(text, files)
     try:
-        # Step 1: 意图识别
-        yield await _sse_event("status", "🔍 正在分析意图...")
+        # yield _sse_event("status", "🔍 正在分析意图...")
+
         async for status, chunk in run_graph_with_streaming(
             input_state=input_state,
-            config=config,
+            config=config
         ):
             if status == "status":
-                yield await _sse_event("status", chunk)
+                yield _sse_event("status", chunk)
             elif status == "chunk":
-                yield await _sse_event("chunk", chunk)
+                yield  _sse_event("chunk", chunk)
             elif status == "error":
-                yield await _sse_event("error", chunk)
+                yield _sse_event("error", chunk)
                 return
 
-        yield await _sse_event("done", "")
+        yield _sse_event("done", "")
     except Exception as e:
-        yield await _sse_event("error", str(e))
+        yield _sse_event("error", str(e))
 
 
 @app.post("/chat/stream")
 async def chat_stream(req: ChatRequest):
-    """真正的 token-level 流式对话"""
+
     return StreamingResponse(
-        _stream_graph_response(req.text, req.thread_id, req.files),
+        content = _stream_graph_response(req.text, req.thread_id, req.files),
         media_type="text/event-stream",
         headers={
             "Cache-Control": "no-cache",

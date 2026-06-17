@@ -3,6 +3,11 @@
 > 日期：2026-06-16  
 > 目标：实现逐字流式输出 + 前端展示后端思考/状态过程
 
+> 📖 如果你对 async/await、流式输出、StreamWriter 不理解，请先阅读：
+> - **[LEARNING_GUIDE.md](./LEARNING_GUIDE.md)** — 从零开始的异步+流式学习指南
+> - **[PRACTICE_TASKS.md](./PRACTICE_TASKS.md)** — 6个动手练习任务
+> - 运行 `backend/test_sync_vs_async.py` 直观感受同步 vs 异步差异
+
 ---
 
 ## 核心问题分析
